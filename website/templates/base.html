@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />
+    <style>
+        .dot {
+          height: 35px;
+          width: 35px;
+          background-color: #6a6a6a7c;
+          border-radius: 50%;
+          transform: translate(32.5px, 32.5px);
+          z-index: 1;
+          pointer-events: none;
+        }
+        body {
+          text-align: center;
+        }
+        .board {
+          width: 800px;
+          height: 800px;
+          background-color: blue;
+          position: fixed;
+          left: 540px;
+        }
+        .square {
+          width: 100px;
+          height: 100px;
+          border: 1.5px solid black;
+          border-style: inset;
+          user-select: none;
+        }
+        .square:hover {
+          background-color:#E2F27E;
+        }
+        .piece {
+          width: 100px;
+          height: 100px;
+          user-select: none;
+        }
+        .piece:hover {
+          background-color:#E2F27E;
+        }
+        .square11 {position: absolute; left: 0px; top: 0px;}
+        .square12 {position: absolute; left: 100px; top: 0px;}
+        .square13 {position: absolute; left: 200px; top: 0px;}
+        .square14 {position: absolute; left: 300px; top: 0px;}
+        .square15 {position: absolute; left: 400px; top: 0px;}
+        .square16 {position: absolute; left: 500px; top: 0px;}
+        .square17 {position: absolute; left: 600px; top: 0px;}
+        .square18 {position: absolute; left: 700px; top: 0px;}
+        .square21 {position: absolute; left: 0px; top: 100px;}
+        .square22 {position: absolute; left: 100px; top: 100px;}
+        .square23 {position: absolute; left: 200px; top: 100px;}
+        .square24 {position: absolute; left: 300px; top: 100px;}
+        .square25 {position: absolute; left: 400px; top: 100px;}
+        .square26 {position: absolute; left: 500px; top: 100px;}
+        .square27 {position: absolute; left: 600px; top: 100px;}
+        .square28 {position: absolute; left: 700px; top: 100px;}
+        .square31 {position: absolute; left: 0px; top: 200px;}
+        .square32 {position: absolute; left: 100px; top: 200px;}
+        .square33 {position: absolute; left: 200px; top: 200px;}
+        .square34 {position: absolute; left: 300px; top: 200px;}
+        .square35 {position: absolute; left: 400px; top: 200px;}
+        .square36 {position: absolute; left: 500px; top: 200px;}
+        .square37 {position: absolute; left: 600px; top: 200px;}
+        .square38 {position: absolute; left: 700px; top: 200px;}
+        .square41 {position: absolute; left: 0px; top: 300px;}
+        .square42 {position: absolute; left: 100px; top: 300px;}
+        .square43 {position: absolute; left: 200px; top: 300px;}
+        .square44 {position: absolute; left: 300px; top: 300px;}
+        .square45 {position: absolute; left: 400px; top: 300px;}
+        .square46 {position: absolute; left: 500px; top: 300px;}
+        .square47 {position: absolute; left: 600px; top: 300px;}
+        .square48 {position: absolute; left: 700px; top: 300px;}
+        .square51 {position: absolute; left: 0px; top: 400px;}
+        .square52 {position: absolute; left: 100px; top: 400px;}
+        .square53 {position: absolute; left: 200px; top: 400px;}
+        .square54 {position: absolute; left: 300px; top: 400px;}
+        .square55 {position: absolute; left: 400px; top: 400px;}
+        .square56 {position: absolute; left: 500px; top: 400px;}
+        .square57 {position: absolute; left: 600px; top: 400px;}
+        .square58 {position: absolute; left: 700px; top: 400px;}
+        .square61 {position: absolute; left: 0px; top: 500px;}
+        .square62 {position: absolute; left: 100px; top: 500px;}
+        .square63 {position: absolute; left: 200px; top: 500px;}
+        .square64 {position: absolute; left: 300px; top: 500px;}
+        .square65 {position: absolute; left: 400px; top: 500px;}
+        .square66 {position: absolute; left: 500px; top: 500px;}
+        .square67 {position: absolute; left: 600px; top: 500px;}
+        .square68 {position: absolute; left: 700px; top: 500px;}
+        .square71 {position: absolute; left: 0px; top: 600px;}
+        .square72 {position: absolute; left: 100px; top: 600px;}
+        .square73 {position: absolute; left: 200px; top: 600px;}
+        .square74 {position: absolute; left: 300px; top: 600px;}
+        .square75 {position: absolute; left: 400px; top: 600px;}
+        .square76 {position: absolute; left: 500px; top: 600px;}
+        .square77 {position: absolute; left: 600px; top: 600px;}
+        .square78 {position: absolute; left: 700px; top: 600px;}
+        .square81 {position: absolute; left: 0px; top: 700px;}
+        .square82 {position: absolute; left: 100px; top: 700px;}
+        .square83 {position: absolute; left: 200px; top: 700px;}
+        .square84 {position: absolute; left: 300px; top: 700px;}
+        .square85 {position: absolute; left: 400px; top: 700px;}
+        .square86 {position: absolute; left: 500px; top: 700px;}
+        .square87 {position: absolute; left: 600px; top: 700px;}
+        .square88 {position: absolute; left: 700px; top: 700px;}
+
+        .blackcell {
+          background-color: #90EE90;
+        }
+        .whitecell {
+          background-color: #FFF0F5;
+        }
+        .bp {
+          background: url('https://lh3.googleusercontent.com/92M6iuntUnP4Nu4gfKCxi5bi3wVQVVNxskUnBe3FP14umUVDjO3509_ku-rJFx1KQ_50f_IsuzJSKKrOugB_TR2qhRVzDsKcFENINJNn6ajm6oPL2HwvKOYv9vN37WI3Q7QCZCEUxA=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .br {
+          background: url('https://lh3.googleusercontent.com/Eav0VL-2wkyvLgCh0npL0Wf2iFkpG07lfRfNB6SmA3a8IztyI5x11mMd_hGyFIVOtVCW14rMuanf-BsM2PJZ9bufbgPWQGb_Ejq7JuOBjlV_5Y5MKp36W2D838K1r_gHRvWwW1cGSw=s60-p-k')
+           no-repeat center;
+          background-size: 110px 110px;
+        }
+        .bh {
+          background: url('https://lh3.googleusercontent.com/KDKIUqEsqKQ8KVQSYFp_-BFGEM92G7IzuXAJjcVode6F_AUin9svHIUdjaTrwspXJcoBoPzOK8aKcA4HTHdZPMQbH8pgQh3yuj3A1FjkbscWa5izuAGY5ZJf_gERSlA47FiU2PNmbw=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .bb {
+          background: url('https://lh3.googleusercontent.com/swYB6KASLj4LBdxEcGj3VQetPyNRCALnxb3GPlXXGViETTOwqfkRC9MnvNz9wbmyBZoSW-hdX7jo3fMWt77hkZh6Xbg2kfMP8u-vC6aVA5zwtb6Lu9h-G3SejgjMRdAPqiK79AkHSQ=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .bk {
+          background: url('https://lh3.googleusercontent.com/LBZ7oP5vfrhCqr7DWPAplsca0criFpFM0LHE2URhDKzFp33Vk6NZ7jw5rzaXjzzOUUexlqMmxjHFuw_f6BPBZ2_qJK4tIPJPuNQjc6BTv5VW_cctDGv835GkAePrxOiuGoPNfLqOAQ=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .bq {
+          background: url('https://lh3.googleusercontent.com/6f1szwCK8MEcMICHpnhoDHoTC1Nez2TV3J_XzjkZot4Gi7GeJXkou4n_xNuxcq7xt7wd93_rg2hdx_sf2bVIz2e2EdfqJV64s-_KcdlgUBs8__MDzxTELaAFIcxIxy1R9RsjCX65ug=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .wp {
+          background: url('https://lh3.googleusercontent.com/dFGhRiGnwrTxf2IyFD4SqdmLeCTA3MFCtoogaMGAmMWLlSKmLNA2uBPr1Ub22M0zXjbVlpFoagbSNTfxsr4vB0QYrjhhvAlPrE1xg98jGFo7NmDHoE1QG7MtOSepGq6di8ErH0JWMg=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .wr {
+          background: url('https://lh3.googleusercontent.com/GjXoEY954l41RNlHfVpbSIT2AFZliCiV0AdMIN9Gn0GntVkFDODRrPulUgEedDKiwv6dd7eUsHjVr3gN8C4Ie-wbKXe_mqTC29s0haNZKZ0NM8Ce5R33PW9KStmhRQK9YhO8XUti_Q=s60-p-k')
+           no-repeat center;
+          background-size: 110px 110px;
+        }
+        .wh {
+          background: url('https://lh3.googleusercontent.com/6ZnX-VHTFJVaTamvNjVXcpgCbYTotoGUDCABoiAacVw0kYwOYf7uQnHZ7wrN6bKGznkna9KlmxZhHH7UA6dIlrnLCaJTn1-V0f062n7IljcCxcMz_co9eVvKYNRbmLob8G-IZRPdCA=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .wb {
+          background: url('https://lh3.googleusercontent.com/ywVIuDGEIA0Vgz2-W-u9ilritz3AIhdLi_11lefh7twDRE56GBGOzC4zBI6b__eAvd8eBI7ScNW3TC9MstdIG5S4GQuyXuMriLyj-ex78PZsjopycLM2a8IVV5JiVDSdDikBp1RAkw=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .wq {
+          background: url('https://lh3.googleusercontent.com/XzO8G9vj42ZTNwrpiPKw1c2fQctNxnut1v0WraXgAIi6EwHtMsd3YhCV-e6ihfZY8smppLaUHOrEiaD_QW7QrQLBPM_0_bGZQKkVkIarKqNDQF5Ebth_IlWinN1VkdpI37uA8oHTLg=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+        .wk {
+          background: url('https://lh3.googleusercontent.com/t4PM5kvsydiPFPYzi16Dfob6k2OJXPkI0V_xwgZhT4twH19tJQp4xQz6QrtW5TR4AuDn66f2H2g6wjiRKSY1i-2XSJVJjmF4QWcZJHx8Pj8X5O8IuLMB5VV6fjFyNYQgrZDYYqtmdQ=s60-p-k')
+           no-repeat center;
+          background-size: 100px 100px;
+        }
+
+
+    </style>
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  <body onload="Javascript:createBoard()">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">{% block content %} {% endblock %}</div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='index.js') }}"
+    ></script>
+  </body>
+</html>
+
+
+
