@@ -95,6 +95,52 @@ function delDots() {
 	});
 }
 
+function legalHorseMoves(id) {
+	let color = getPiece(id)[0];
+	let moves = [];
+	let row = Number(id[6]);
+	let col = Number(id[7]);
+	const legal = [[2, 1],[2, -1],[-2, 1],[-2, -1],[1, -2],[-1, -2],[1, 2],[-1, 2]];
+	legal.forEach((sq) => {
+		let newRow = row + sq[0];
+		let newCol = col + sq[1];
+		if (inBoard(newRow, newCol)) {
+			id = createId(newRow, newCol);
+			if (pieceCheck(id)) {
+				if (getPiece(id)[0] != color) {
+					moves.push(id);
+				}
+				return;
+			}
+			moves.push(id);
+		}
+	});
+	moves.forEach(colorMoves);
+	return moves;
+}
+
+function legalQueenMoves(id) {
+	let color = getPiece(id)[0];
+	let moves = [];
+	const legal = [[1, -1],[1, 0],[1, 1],[-1, -1],[-1, 0],[-1, 1],[0, 1],[0, -1]];
+	legal.forEach((sq) => {
+		moves.push.apply(moves, moveHelper(Number(id[6]), Number(id[7]), sq[0], sq[1], color));
+	});
+	moves.forEach(colorMoves);
+	return moves;
+}
+
+function legalRookMoves(id) {
+	let color = getPiece(id)[0];
+	let moves = [];
+	const legal = [[1, 0],[0, 1],[-1, 0],[0, -1]];
+	legal.forEach((sq) => {
+		moves.push.apply(moves, moveHelper(Number(id[6]), Number(id[7]), sq[0], sq[1], color));
+	});
+	moves.forEach(colorMoves);
+	return moves;
+}
+
 function legalPawnMoves(id) {
 	let moves = [];
 	let newRow = Number(id[6]);
@@ -135,25 +181,29 @@ function legalPawnMoves(id) {
 function legalBishopMoves(id) {
 	let color = getPiece(id)[0];
 	var moves = [];
-	moves.push.apply(moves, bishopHelper(Number(id[6]), Number(id[7]), 1, 1, color));
-	moves.push.apply(moves, bishopHelper(Number(id[6]), Number(id[7]), 1, -1, color));
-	moves.push.apply(moves, bishopHelper(Number(id[6]), Number(id[7]), -1, -1, color));
-	moves.push.apply(moves, bishopHelper(Number(id[6]), Number(id[7]), -1, 1, color));
+	const legal = [[1, 1],[-1, 1],[-1, -1],[1, -1]];
+	legal.forEach((sq) => {
+		moves.push.apply(moves, moveHelper(Number(id[6]), Number(id[7]), sq[0], sq[1], color));
+	});
 	moves.forEach(colorMoves);
+	return moves;
 }
 
-function bishopHelper(row, col, subRow, subCol, color) {
+function moveHelper(row, col, subRow, subCol, color) {
 	var temp = [];
 	row += subRow;
 	col += subCol;
-	while (inBoard(row, col) && !(pieceCheck(createId(row, col)))) {
-		temp.push(createId(row, col));
+	while (inBoard(row, col)) {
+		let id = createId(row, col);
+		if (pieceCheck(id)) {
+			if (getPiece(id)[0] != color) {
+				temp.push(id);
+			}
+			break;
+		}
+		temp.push(id);
 		row += subRow;
 		col += subCol;
-		let id = createId(row, col);
-		if (pieceCheck(id) && getPiece(id)[0] != color) {
-			temp.push(id);
-		}
 	}
 	return (temp);
 }
@@ -167,6 +217,7 @@ function switchTurn() {
 }
 var dropped = false;
 var sqr1;
+var legal;
 
 function select(id) {
 	if (pieceCheck(id) && rightColor(id)) {
@@ -174,9 +225,15 @@ function select(id) {
 		sqr1 = id;
 		db = true;
 		if ((getPiece(id))[1] == "p") {
-			legalPawnMoves(id);
+			legal = legalPawnMoves(id);
 		} else if ((getPiece(id))[1] == "b") {
-			legalBishopMoves(id);
+			legal = legalBishopMoves(id);
+		} else if ((getPiece(id))[1] == "r") {
+			legal = legalRookMoves(id);
+		} else if ((getPiece(id))[1] == "q") {
+			legal = legalQueenMoves(id);
+		} else if ((getPiece(id))[1] == "h") {
+			legal = legalHorseMoves(id);
 		}
 
 	}
@@ -188,14 +245,14 @@ function drop(id) {
 		const class1 = sqr1;
 		const class2 = id;
 
-		if (pieceCheck(class2) && !(rightColor(class2))) {
+		if (pieceCheck(class2) && !(rightColor(class2)) && legal.includes(class2)) {
 			takePiece(class1, class2);
 			switchTurn();
-		} else if (!(pieceCheck(class2))) {
+		} else if (!(pieceCheck(class2)) && legal.includes(class2)) {
 			takeSquare(class1, class2);
 			switchTurn();
 		}
-
+		legal = undefined;
 		sqr1 = undefined;
 	}
 }
